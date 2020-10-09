@@ -1,0 +1,31 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+_public_hdrs = [
+    "include/boost/*.hpp",
+    "include/boost/interprocess/*.hpp",
+    "include/boost/interprocess/allocators/*.hpp",
+    "include/boost/interprocess/containers/*.hpp",
+    "include/boost/interprocess/indexes/*.hpp",
+    "include/boost/interprocess/ipc/*.hpp",
+    "include/boost/interprocess/mem_algo/*.hpp",
+    "include/boost/interprocess/smart_ptr/*.hpp",
+    "include/boost/interprocess/streams/*.hpp",
+    "include/boost/interprocess/sync/*.hpp",
+    "include/boost/interprocess/sync/posix/*.hpp",
+    "include/boost/interprocess/sync/shm/*.hpp",
+    "include/boost/interprocess/sync/spin/*.hpp",
+    "include/boost/interprocess/sync/windows/*.hpp",
+]
+
+cc_library(
+    name = "interprocess_internal",
+    hdrs = glob(["include/boost/**/*.hpp"], exclude = _public_hdrs),
+)
+
+cc_library(
+    name = "interprocess",
+    visibility = ["//visibility:public"],
+    includes = ["include"],
+    hdrs = glob(_public_hdrs),
+    deps = [":interprocess_internal"],
+)
